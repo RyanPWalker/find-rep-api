@@ -46,7 +46,7 @@ function jsonResponse(req, res, next) {
   return res.json(res.locals);
 }
 
-const server = app.listen(3000, () => {
+const server = app.listen(3001, () => {
   const host = server.address().address,
     port = server.address().port;
 
