@@ -13,6 +13,7 @@ class App extends Component {
     reps: [],
     selectedState: '',
     isRepresentatives: 'representatives',
+    errorMessage: '',
 
   };
 
@@ -23,7 +24,16 @@ class App extends Component {
     try {
       fetch(endpoint)
         .then(res => res.json())
-        .then(reps => this.setState({ reps: reps.results }));
+        .then(reps => {
+          if (reps.success === true) {
+            this.setState({ 
+              reps: reps.results,
+              errorMessage: '' 
+            })
+          } else {
+            this.setState({ errorMessage: 'Unable to fetch results.'})
+          }
+        });
     } catch (e) {
       console.log("Something went wrong- ", e);
     }
@@ -46,7 +56,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>Reps</h1>
+        <h1>Who's My Representative?</h1>
         <form>
         <label>
           Representative 
@@ -81,6 +91,7 @@ class App extends Component {
         {this.state.reps.map((rep, index) =>
           <div key={index}>{rep.name}, {rep.party}</div>
         )}
+        {this.state.errorMessage}
         {console.log("selectedState: " + this.state.selectedState)}
       </div>
     );
