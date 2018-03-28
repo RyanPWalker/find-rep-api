@@ -87,7 +87,7 @@ class App extends Component {
         </label>
       </form>
         {this.state.reps.map((rep, index) =>
-          <div key={index}>{rep.name}</div>
+          <div key={index}>{rep.name}, {rep.party}</div>
         )}
         {console.log("selectedState: " + this.state.selectedState)}
       </div>
