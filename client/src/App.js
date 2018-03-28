@@ -77,14 +77,6 @@ class App extends Component {
           </select>
         </label>
         <br />
-        <label>
-          Number of guests:
-          <input
-            name="numberOfGuests"
-            type="number"
-            value={this.state.numberOfGuests}
-            onChange={this.handleInputChange} />
-        </label>
       </form>
         {this.state.reps.map((rep, index) =>
           <div key={index}>{rep.name}, {rep.party}</div>
