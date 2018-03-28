@@ -1,5 +1,7 @@
 .App {
-  text-align: center;
+  text-align: left;
+  padding: 5%;
+  font-family: 'Helvetica Neue', sans-serif;
 }
 
 .App-logo {
@@ -20,6 +22,60 @@
 
 .App-intro {
   font-size: large;
+}
+
+.header {
+  color: #03a7ed;
+  padding-bottom: 15px;
+}
+
+.hoverTable {
+  width: 20%;
+  border-collapse: collapse;
+}
+
+.hoverTable th {
+  background: #f4f4f4;
+}
+
+.hoverTable td {
+  padding: 7px;
+}
+
+.hoverTable tr {
+  background: #fdfdfd;
+  border-bottom: black 1px solid;
+  height: 10px;
+}
+
+.hoverTable tr:hover {
+  background-color: #f4f4f4;
+}
+
+hr {
+  color: #f4f4f4;
+  border: none;
+  background-color: #f4f4f4;
+  height: 1px;
+}
+
+label {
+  padding-left: 15px;
+}
+
+select {
+  background: transparent;
+  background-color: #f4f4f4;
+  overflow: hidden;
+  width: 100px;
+  height: 29px;
+  font-size: 14px;
+  padding: 5px;
+
+  border: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
 }
 
 @keyframes App-logo-spin {

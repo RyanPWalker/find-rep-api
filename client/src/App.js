@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
@@ -13,9 +12,23 @@ class App extends Component {
     reps: [],
     selectedState: '',
     isRepresentatives: 'representatives',
+    repIndex: null,
     errorMessage: '',
 
   };
+
+  handleInputChange = event => {
+    const value = /*target.type === 'checkbox' ? target.checked :*/ event.target.value;
+    const name = event.target.name;
+    console.log("value: " + value + " name: " + name);
+
+    this.setState({
+      [name]: value
+    }, () => {
+      if (this.state.selectedState)
+        this.getRepresentatives();
+    });
+  }
 
   getRepresentatives = () => {
     const endpoint = '/' + this.state.isRepresentatives + '/' + this.state.selectedState;
@@ -35,64 +48,81 @@ class App extends Component {
           }
         });
     } catch (e) {
-      console.log("Something went wrong- ", e);
+      console.log("Something went wrong- ", e)
+      this.setState({ errorMessage: 'Unable to fetch results.'})
     }
   }
 
-  handleInputChange = (event) => {
-    const target = event.target;
-    const value = /*target.type === 'checkbox' ? target.checked :*/ target.value;
-    const name = target.name;
-    console.log("value: " + value + " name: " + name);
-
-    this.setState({
-      [name]: value
-    }, () => {
-      if (this.state.selectedState)
-        this.getRepresentatives();
-    });
+  renderRepresentativeInfo = () => {
+    if (this.state.repIndex != null) {
+      const repInfo = this.state.reps[this.state.repIndex]
+      return (
+        <div>
+          <p>{repInfo.name}</p>
+          <p>{repInfo.party}</p>
+          <p>{repInfo.state}</p>
+          <p>{repInfo.district}</p>
+          <p>{repInfo.phone}</p>
+          <p>{repInfo.office}</p>
+          <p>{repInfo.link}</p>
+        </div>
+      )
+    }
   }
 
   render() {
     return (
       <div className="App">
-        <h1>Who's My Representative?</h1>
+        <h1 className="header">Who's My Representative?</h1>
+        <hr/>
         <form>
-        <label>
-          Representative 
-          <input
-            name="isRepresentatives"
-            value="representatives"
-            type="checkbox"
-            checked={this.state.isRepresentatives === 'representatives'}
-            onChange={this.handleInputChange} />
-        </label>
-        <label>
-          Senator 
-          <input
-            name="isRepresentatives"
-            value="senators"
-            type="checkbox"
-            checked={this.state.isRepresentatives === 'senators'}
-            onChange={this.handleInputChange} />
-        </label>
-        <br />
-        <label>
-          State: 
-          <select name="selectedState" onChange={this.handleInputChange}>
-            <option selected value="" >-Select- </option>
-            {this.state.states.map((res, index) =>
-              <option key={index} value={res}>{res}</option>
+          <label>
+            Representative 
+            <input
+              name="isRepresentatives"
+              value="representatives"
+              type="checkbox"
+              checked={this.state.isRepresentatives === 'representatives'}
+              onChange={this.handleInputChange} />
+          </label>
+          <label>
+            Senator 
+            <input
+              name="isRepresentatives"
+              value="senators"
+              type="checkbox"
+              checked={this.state.isRepresentatives === 'senators'}
+              onChange={this.handleInputChange} />
+          </label>
+          <label>
+            
+            <select name="selectedState" onChange={this.handleInputChange}>
+              <option value="select" >State</option>
+              {this.state.states.map((res, index) =>
+                <option key={index} value={res}>{res}</option>
+              )}
+            </select>
+          </label>
+          <br />
+        </form>
+
+        <h2>List / <span style={{color: "#03a7ed"}}>Representatives</span></h2>
+
+        <table className="hoverTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Party</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.reps.map((rep, index) =>
+              <tr key={index} onClick={() => this.setState({repIndex: index})}><td>{rep.name}</td><td style={{float: 'right'}}>{rep.party}</td></tr>
             )}
-          </select>
-        </label>
-        <br />
-      </form>
-        {this.state.reps.map((rep, index) =>
-          <div key={index}>{rep.name}, {rep.party}</div>
-        )}
+          </tbody>
+        </table>
         {this.state.errorMessage}
-        {console.log("selectedState: " + this.state.selectedState)}
+        {this.renderRepresentativeInfo()}
       </div>
     );
   }
