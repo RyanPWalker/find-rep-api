@@ -61,7 +61,7 @@ class App extends Component {
   }
 
   renderEmptyState = () => {
-    if (this.state.reps.length == 0) {
+    if (this.state.reps.length === 0) {
       return (
         <p style={{ fontSize: '12px', color: 'grey' }}>No data has been fetched.  Select a state and click Submit to continue.</p>
       )
