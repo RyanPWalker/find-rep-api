@@ -1,20 +1,14 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import states from "./constants/states.json";
 
 class App extends Component {
   state = {
-    states: ["AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC",  
-    "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA",  
-    "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE",  
-    "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC",  
-    "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"],
-
-    selectedState: '',
+    selectedState: "",
     reps: [],
     repIndex: null,
-    isRepresentatives: 'representatives',
-    errorMessage: '',
-
+    isRepresentatives: "representatives",
+    errorMessage: ""
   };
 
   handleInputChange = event => {
@@ -27,65 +21,87 @@ class App extends Component {
     });
     // I did have it set to automatically fetch results when changed
     // But I left it out since the instructions ask for a button.
-  }
+  };
 
   handleSubmit = () => {
-    this.setState({
-      repIndex: null
-    }, () => {
-      if (this.state.selectedState)
-        this.getRepresentatives();
-    });
-  }
+    this.setState(
+      {
+        repIndex: null
+      },
+      () => {
+        if (this.state.selectedState) this.getRepresentatives();
+      }
+    );
+  };
 
   getRepresentatives = () => {
-    const endpoint = '/' + this.state.isRepresentatives + '/' + this.state.selectedState;
+    const endpoint =
+      "/" + this.state.isRepresentatives + "/" + this.state.selectedState;
 
     try {
       fetch(endpoint)
         .then(res => res.json())
-        .then(reps => {
-          if (reps.success === true) {
-            this.setState({ 
-              reps: reps.results,
-              errorMessage: '' 
-            })
+        .then(res => {
+          if (res.success === true) {
+            this.setState({
+              reps: res.results,
+              errorMessage: ""
+            });
           } else {
-            this.setState({ errorMessage: 'Unable to fetch results.'})
+            this.setState({ errorMessage: "Unable to fetch results." });
+            console.log("Error message: ", res.error);
           }
         });
     } catch (e) {
-      console.log("Something went wrong- ", e)
-      this.setState({ errorMessage: 'Unable to fetch results.'})
+      console.log("Something went wrong- ", e);
+      this.setState({ errorMessage: "Unable to fetch results." });
     }
-  }
+  };
 
   renderEmptyState = () => {
     if (this.state.reps.length === 0) {
       return (
-        <p style={{ fontSize: '12px', color: 'grey' }}>No data has been fetched.  Select a state and click Submit to continue.</p>
-      )
+        <p style={{ fontSize: "12px", color: "grey" }}>
+          No data has been fetched. Select a state and click Submit to continue.
+        </p>
+      );
     }
-  }
+  };
 
   renderRepresentativeInfo = () => {
     if (this.state.repIndex != null) {
-      const repInfo = this.state.reps[this.state.repIndex]
+      const repInfo = this.state.reps[this.state.repIndex];
       return (
         <div>
-          <input className="input" placeholder="First Name" value={repInfo.name.split(' ')[0]} />
+          <input
+            className="input"
+            placeholder="First Name"
+            value={repInfo.name.split(" ")[0]}
+          />
           <br />
-          <input className="input" placeholder="Last Name" value={repInfo.name.split(' ')[1]} />
+          <input
+            className="input"
+            placeholder="Last Name"
+            value={repInfo.name.split(" ")[1]}
+          />
           <br />
-          <input className="input" placeholder="District" value={repInfo.district} />
+          <input
+            className="input"
+            placeholder="District"
+            value={repInfo.district}
+          />
           <br />
           <input className="input" placeholder="Phone" value={repInfo.phone} />
           <br />
-          <input className="input" placeholder="Office" value={repInfo.office} />
+          <input
+            className="input"
+            placeholder="Office"
+            value={repInfo.office}
+          />
           <br />
           <input className="input" placeholder="Link" value={repInfo.link} />
         </div>
-      )
+      );
     } else {
       return (
         <div>
@@ -101,9 +117,9 @@ class App extends Component {
           <br />
           <input className="input" placeholder="Link" />
         </div>
-      )
+      );
     }
-  }
+  };
 
   render() {
     return (
@@ -113,40 +129,50 @@ class App extends Component {
           <hr />
           <form>
             <label>
-              Representative 
+              Representative
               <input
                 name="isRepresentatives"
                 value="representatives"
                 type="checkbox"
-                checked={this.state.isRepresentatives === 'representatives'}
-                onChange={this.handleInputChange} />
+                checked={this.state.isRepresentatives === "representatives"}
+                onChange={this.handleInputChange}
+              />
             </label>
             <label>
-              Senator 
+              Senator
               <input
                 name="isRepresentatives"
                 value="senators"
                 type="checkbox"
-                checked={this.state.isRepresentatives === 'senators'}
-                onChange={this.handleInputChange} />
+                checked={this.state.isRepresentatives === "senators"}
+                onChange={this.handleInputChange}
+              />
             </label>
             <label>
-    
               <select name="selectedState" onChange={this.handleInputChange}>
-                <option value="select" >State</option>
-                {this.state.states.map((res, index) =>
-                  <option key={index} value={res}>{res}</option>
-                )}
+                <option value="select">State</option>
+                {states.states.map((res, index) => (
+                  <option key={index} value={res}>
+                    {res}
+                  </option>
+                ))}
               </select>
             </label>
-            <input type="Button" value="Submit" className="submitButton" onClick={this.handleSubmit} />
-            <span style={{ color: 'red' }}>{this.state.errorMessage}</span>
+            <input
+              type="Button"
+              value="Submit"
+              className="submitButton"
+              onClick={this.handleSubmit}
+            />
+            <span style={{ color: "red" }}>{this.state.errorMessage}</span>
             <br />
           </form>
         </section>
 
         <section className="section2">
-          <h2>List / <span style={{color: "#03a7ed"}}>Representatives</span></h2>
+          <h2>
+            List / <span style={{ color: "#03a7ed" }}>Representatives</span>
+          </h2>
 
           <table className="hoverTable">
             <thead>
@@ -156,9 +182,15 @@ class App extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.reps.map((rep, index) =>
-                <tr key={index} onClick={() => this.setState({repIndex: index})}><td>{rep.name}</td><td>{rep.party}</td></tr>
-              )}
+              {this.state.reps.map((rep, index) => (
+                <tr
+                  key={index}
+                  onClick={() => this.setState({ repIndex: index })}
+                >
+                  <td>{rep.name}</td>
+                  <td>{rep.party}</td>
+                </tr>
+              ))}
               {this.renderEmptyState()}
             </tbody>
           </table>
