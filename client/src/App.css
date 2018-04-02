@@ -1,5 +1,4 @@
 main {
-  width: 100%;
   display: grid;
   grid-template-areas:
     "section1 section1"
@@ -45,6 +44,7 @@ select {
 
 .section1 {
   grid-area: section1;
+  width: 100%;
 }
 
 .section2 {

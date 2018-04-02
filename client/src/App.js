@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import states from "./constants/states.json";
+import Inputs from "./components/Inputs";
 
 class App extends Component {
   state = {
@@ -14,6 +14,7 @@ class App extends Component {
   handleInputChange = event => {
     const value = event.target.value;
     const name = event.target.name;
+    console.log(value, name);
 
     this.setState({
       [name]: value,
@@ -124,50 +125,13 @@ class App extends Component {
   render() {
     return (
       <main className="App">
-        <section className="section1">
-          <h1 className="header">Who's My Representative?</h1>
-          <hr />
-          <form>
-            <label>
-              Representative
-              <input
-                name="isRepresentatives"
-                value="representatives"
-                type="checkbox"
-                checked={this.state.isRepresentatives === "representatives"}
-                onChange={this.handleInputChange}
-              />
-            </label>
-            <label>
-              Senator
-              <input
-                name="isRepresentatives"
-                value="senators"
-                type="checkbox"
-                checked={this.state.isRepresentatives === "senators"}
-                onChange={this.handleInputChange}
-              />
-            </label>
-            <label>
-              <select name="selectedState" onChange={this.handleInputChange}>
-                <option value="select">State</option>
-                {states.states.map((res, index) => (
-                  <option key={index} value={res}>
-                    {res}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <input
-              type="Button"
-              value="Submit"
-              className="submitButton"
-              onClick={this.handleSubmit}
-            />
-            <span style={{ color: "red" }}>{this.state.errorMessage}</span>
-            <br />
-          </form>
-        </section>
+        <Inputs
+          className="section1"
+          handleInputChange={this.handleInputChange}
+          handleSubmit={this.handleSubmit}
+          isRepresentatives={this.state.isRepresentatives}
+          selectedState={this.state.selectedState}
+        />
 
         <section className="section2">
           <h2>
