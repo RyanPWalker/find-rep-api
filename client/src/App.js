@@ -14,13 +14,8 @@ class App extends Component {
   };
 
   handleInputChange = event => {
-    const value = event.target.value
-      ? event.target.value
-      : event.target.getAttribute("value");
-    const name = event.target.name
-      ? event.target.name
-      : event.target.getAttribute("name");
-    console.log(name, value);
+    const value = event.target.value || event.target.getAttribute("value");
+    const name = event.target.name || event.target.getAttribute("name");
 
     this.setState({
       [name]: value
