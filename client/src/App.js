@@ -39,24 +39,19 @@ class App extends Component {
     const endpoint =
       "/" + this.state.isRepresentatives + "/" + this.state.selectedState;
 
-    try {
-      fetch(endpoint)
-        .then(res => res.json())
-        .then(res => {
-          if (res.success === true) {
-            this.setState({
-              reps: res.results,
-              errorMessage: ""
-            });
-          } else {
-            this.setState({ errorMessage: "Unable to fetch results." });
-            console.log("Error message: ", res.error);
-          }
-        });
-    } catch (e) {
-      console.log("Something went wrong- ", e);
-      this.setState({ errorMessage: "Unable to fetch results." });
-    }
+    fetch(endpoint)
+      .then(res => res.json())
+      .then(res => {
+        if (res.success === true) {
+          this.setState({
+            reps: res.results,
+            errorMessage: ""
+          });
+        } else {
+          this.setState({ errorMessage: "Unable to fetch results." });
+          console.log("Error message: ", res.error);
+        }
+      });
   };
 
   render() {
