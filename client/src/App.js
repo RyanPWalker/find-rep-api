@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Inputs from "./components/Inputs";
+import Representatives from "./components/Representatives";
 
 class App extends Component {
   state = {
@@ -12,13 +13,16 @@ class App extends Component {
   };
 
   handleInputChange = event => {
-    const value = event.target.value;
-    const name = event.target.name;
-    console.log(value, name);
+    const value = event.target.value
+      ? event.target.value
+      : event.target.getAttribute("value");
+    const name = event.target.name
+      ? event.target.name
+      : event.target.getAttribute("name");
+    console.log(name, value);
 
     this.setState({
-      [name]: value,
-      repIndex: null
+      [name]: value
     });
     // I did have it set to automatically fetch results when changed
     // But I left it out since the instructions ask for a button.
@@ -56,16 +60,6 @@ class App extends Component {
     } catch (e) {
       console.log("Something went wrong- ", e);
       this.setState({ errorMessage: "Unable to fetch results." });
-    }
-  };
-
-  renderEmptyState = () => {
-    if (this.state.reps.length === 0) {
-      return (
-        <p style={{ fontSize: "12px", color: "grey" }}>
-          No data has been fetched. Select a state and click Submit to continue.
-        </p>
-      );
     }
   };
 
@@ -133,32 +127,12 @@ class App extends Component {
           selectedState={this.state.selectedState}
         />
 
-        <section className="section2">
-          <h2>
-            List / <span style={{ color: "#03a7ed" }}>Representatives</span>
-          </h2>
+        <Representatives
+          className="section1"
+          handleInputChange={this.handleInputChange}
+          reps={this.state.reps}
+        />
 
-          <table className="hoverTable">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Party</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.reps.map((rep, index) => (
-                <tr
-                  key={index}
-                  onClick={() => this.setState({ repIndex: index })}
-                >
-                  <td>{rep.name}</td>
-                  <td>{rep.party}</td>
-                </tr>
-              ))}
-              {this.renderEmptyState()}
-            </tbody>
-          </table>
-        </section>
         <section className="section3">
           <h2>Info</h2>
           {this.renderRepresentativeInfo()}
